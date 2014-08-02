@@ -11,5 +11,6 @@ RUN        apt-key add rabbitmq-signing-key-public.asc
 RUN        apt-get update
 RUN        apt-get install -y -q rabbitmq-server
 RUN        rabbitmq-plugins enable rabbitmq_management
+RUN        echo "[{rabbit, [{loopback_users, []}]}]." > /etc/rabbitmq/rabbitmq.config
 EXPOSE     5672 15672
 ENTRYPOINT ["rabbitmq-server"]
