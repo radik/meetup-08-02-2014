@@ -1,0 +1,17 @@
+{
+  "name": "docker-08-02-2014",
+  "version": "0.0.0",
+  "homepage": "https://github.com/radik/meetup-08-02-2014",
+  "authors": [
+    "Radik Fattakhov <radikft@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

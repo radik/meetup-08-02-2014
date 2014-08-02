@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Docker - Что? Зачем? Как?</title>
+
+		<meta name="description" content="">
+		<meta name="author" content="Radik Fattakhov">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="bower_components/reveal.js/css/reveal.min.css">
+		<link rel="stylesheet" href="bower_components/reveal.js/css/theme/serif.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="bower_components/reveal.js/lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'bower_components/reveal.js/css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+		<style type="text/css">
+		   section.logos img{
+		   	   border:0px;
+		   	   max-width: 120px;
+		   	   max-height: 120px;
+		   }
+		</style>
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h2>Docker - Что? Как? Зачем?</h2>
+					<h3>DevDay Kazan #12</h3>
+					<p>
+						<small><a href="http://hakim.se">Радик Фаттахов</a> / <a href="http://twitter.com/radikft">@radikft</a></small>
+					</p>
+				</section>
+				<section>
+					<h2>Кто ты такой?</h2>
+					<ul>
+						<li>Разработчик в БАРС Груп</li>
+						<li>На работе - .Net, JavaScript, Ruby</li>
+						<li>Для души - Python, Go и что-нибудь из функционального заверните</li>
+					</ul>
+				</section>
+				<section>
+					<h2>План</h2>
+					<ul>
+						<li><b>Что</b> такое Docker?</li>
+						<li><b>Как</b> его использовать?</li>
+						<li><b>Зачем</b> он нужен?</li>
+						<li>Demo</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Что?</h2>
+						<blockquote>Docker - открытая платформа для разработки, доставки и запуска приложений.
+						<cite><a href="http://docker.io">http://docker.io</a></cite></blockquote>
+					</section>
+					<section>
+						<h3>Основные компоненты Docker</h3>
+						<ul>
+							<li>Docker - open source платформа контейнерной виртуализации</li>
+							<li><a href="https://hub.docker.com/">Docker Hub</a> - Software-as-a-Service для управления и распространения Docker-контейнеров.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Архитектура</h3>
+						<img alt="Docker Architecture Diagram" src="img/architecture.svg">
+					</section>
+					<section>
+						<h3>Docker изнутри</h3>
+						<ul>
+							<li>Docker images</li>
+							<li>Docker registries</li>
+							<li>Docker containers</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Docker image</h3>
+						Read-only шаблон для запуска контейнеров.
+						<img src="img/docker-image.png" alt="" >
+					</section>
+					<section>
+						<h3>Dockerfile</h3>
+						<pre><code class="bash">
+# Dockerizing RabbitMQ: Dockerfile for building RabbitMQ images
+# Based on ubuntu:14.04, installs RabbitMQ following the instructions from:
+# http://www.rabbitmq.com/install-debian.html
+FROM       ubuntu:14.04
+MAINTAINER Radik Fattakhov radikft@gmail.com
+RUN        apt-get update
+RUN        apt-get install -y -q wget
+RUN        echo 'deb http://www.rabbitmq.com/debian/ testing main' | tee -a /etc/apt/sources.list
+RUN        wget http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+RUN        apt-key add rabbitmq-signing-key-public.asc 
+RUN        apt-get update
+RUN        apt-get install -y -q rabbitmq-server
+RUN        rabbitmq-plugins enable rabbitmq_management
+EXPOSE     5672 15672
+ENTRYPOINT ["rabbitmq-server"]
+						</code></pre>
+					</section>
+					<section>
+						<h3>Docker registry</h3>
+						Хранилище для Docker images - например, <a href="https://hub.docker.com/">Docker Hub</a>.
+					</section>
+					<section>
+						<h3>Docker container</h3>
+	<pre><code class="bash">$ docker run -i -t ubuntu /bin/bash</code></pre>
+					</section>
+					<section>
+						<h3>Под капотом</h3>
+						<ul>
+							<li>Namespaces (pid, net, ipc, mnt, uts)</li>
+							<li>Control groups</li>
+							<li>Union file systems (AUFS, btrfs, vfs и DeviceMapper)</li>
+							<li>Container format (libcontainer, LXC)</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h3>Как начать использовать Docker?</h3>
+					Установить boot2docker
+					<img src="img/osx-installer.png" alt="">
+				</section>
+				<section>
+					<h2>Зачем?</h2>
+					<ul>
+						<li>Быстрее доставлять ваши приложения</li>
+						<li>Deploy &amp; масштабироваться быстрее</li>
+						<li>Эффективнее использовать ресурсы</li>
+						<li>Простота управления</li>
+					</ul>
+				</section>
+				<section class="logos">
+					<img src="img/redhat-logo.png" alt="">
+					<img src="img/ebay-logo.png"> <br>
+					<img src="img/openstack.png" alt="">
+					<img src="img/yandex-small.png">
+					<img src="img/spotify-small.png"> <br>
+					<img src="img/mailgun-logo.png">
+					<img src="img/aws-logo.png" alt=""> 
+				</section>
+				<section>
+					<h3>Ссылки</h3>
+					<ul>
+						<li><a href="http://docker.io">Docker.io</a></li>
+						<li><a href="https://docs.docker.com/userguide/">User Guide</a></li>
+						<li><a href="http://boot2docker.io/">Boot2Docker</a></li>
+						<li><a href="http://www.youtube.com/user/dockerrun">Канал на YouTube</a></li>
+					</ul>
+				</section>
+				<section>
+					<h2>Спасибо за внимание!</h2>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="bower_components/reveal.js/lib/js/head.min.js"></script>
+		<script src="bower_components/reveal.js/js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'bower_components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'bower_components/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
